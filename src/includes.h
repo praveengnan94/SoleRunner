@@ -27,7 +27,7 @@
 #include "em_lesense.h"
 #include "caplesenseconfig.h"
 //#include "DMASetup.h"
-//#include "ADCSetup.h"
+///#include "ADCSetup.h"
 #include "em_adc.h"
 #include "em_dma.h"
 //#include "ACMP.h"
