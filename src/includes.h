@@ -8,9 +8,6 @@
 #ifndef SRC_INCLUDES_H_
 #define SRC_INCLUDES_H_
 
-#include "vddcheck.h"
-#include "rtcdriver.h"
-
 //# include library header files
 #include <stdint.h>
 #include <stdbool.h>
@@ -27,11 +24,11 @@
 #include "em_lesense.h"
 #include "caplesenseconfig.h"
 //#include "DMASetup.h"
-///#include "ADCSetup.h"
+//#include "ADCSetup.h"
 #include "em_adc.h"
 #include "em_dma.h"
 //#include "ACMP.h"
-#include "uart.h"
+//#include "uart.h"
 #include "definitions.h"
 //#include "TIMER.h"
 //#include "sleep.h"

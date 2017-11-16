@@ -18,15 +18,15 @@ int main(void)
   BlockSleep(block_sleep_mode);
   gpio_setup();
 
-  ADCSetup();
-//  DMASetup();
-  ADC_Start(ADC0, adcStartSingle);
-
+//  ADCSetup();
+//
+//  ADC_Start(ADC0, adcStartSingle);
+//
 //  uart0_init();
-
+//
 //  i2c_setup();
 //  timer_setup();
-
+//
 //  LESENSE_setup();
 
 /* Infinite loop */
