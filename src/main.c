@@ -25,13 +25,13 @@ int main(void)
 //  uart0_init();
 //
 //  i2c_setup();
-//  timer_setup();
+  timer_setup();
 //
 //  LESENSE_setup();
 
 /* Infinite loop */
   while (1)
   {
-//	  sleep();
+	  sleep();
   }
 }

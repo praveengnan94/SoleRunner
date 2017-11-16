@@ -18,6 +18,17 @@
 
 #define block_sleep_mode 2
 
+#define LF_CLK 32768
+#define ULF_CLK 1000
+
+
+//DEFINITIONS FOR HEART RATE MODULE
+
+#define HR_PWR_PORT				 gpioPortD
+#define HR_PWR_PIN				 7U
+#define LETIMER_PERIOD 2
+#define LED_ON_TIME 0.05
+
 //DEFINTIONS FOR I2C PINS AND PORTS
 
 #define i2c_sda_port gpioPortC
