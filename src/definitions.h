@@ -16,7 +16,7 @@
 #define EM3 3
 #define COMPMAX 500
 
-#define block_sleep_mode 2
+#define block_sleep_mode 0
 
 #define LF_CLK 32768
 #define ULF_CLK 1000
@@ -26,8 +26,10 @@
 
 #define HR_PWR_PORT				 gpioPortD
 #define HR_PWR_PIN				 7U
-#define LETIMER_PERIOD 2
-#define LED_ON_TIME 0.05
+#define ADC_PORT_HR    			 gpioPortD
+#define ADC_PIN_HR				 6U
+#define LETIMER_PERIOD 0.001
+#define LED_ON_TIME 0.01	//1 milli second
 
 //DEFINTIONS FOR I2C PINS AND PORTS
 
@@ -97,10 +99,10 @@ int adc_complete;
 #define adc_channel ADC0
 #define temperature_pin adcSingleInputTemp
 #define int_temp_reference adcRef1V25
-#define adc_resolution adcRes12Bit
-#define adc_acquire_time adcAcqTime4
+#define adc_resolution adcRes6Bit
+#define adc_acquire_time adcAcqTime2
 #define ADC0_rep true
-#define ADC0_warmup adcWarmupNormal
+#define ADC0_warmup adcWarmupKeepScanRefWarm
 #define adc_clk 1300000
 #define ADC0_DMA_Arbitration dmaArbitrate1
 #define TEMP_Sensor_DMA true

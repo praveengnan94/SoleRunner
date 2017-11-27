@@ -18,9 +18,8 @@ int main(void)
   BlockSleep(block_sleep_mode);
   gpio_setup();
 
-//  ADCSetup();
-//
-//  ADC_Start(ADC0, adcStartSingle);
+  ADCSetup();
+
 //
 //  uart0_init();
 //

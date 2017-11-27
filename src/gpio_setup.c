@@ -18,8 +18,9 @@ void gpio_setup()
 	GPIO_PinModeSet(HR_PWR_PORT, HR_PWR_PIN, gpioModePushPull, 0);
 	GPIO_DriveModeSet(HR_PWR_PORT, gpioDriveModeStandard);
 
-	  /* Enable GPIO_EVEN interrupt vector in NVIC. */
-  //GPIO_PinModeSet(gpioPortD, 1, gpioModePushPull, 1);
+	//ADC heart rate
+	GPIO_DriveModeSet(ADC_PORT_HR, gpioDriveModeStandard);
+	GPIO_PinModeSet(ADC_PORT_HR, ADC_PIN_HR, gpioModeDisabled, 0);
 
   //  GPIO_PinOutSet(LEDPORT, LEDPIN0);// Added for uart BLE - because its GPIO is ON on initilization
   	  /* Enable GPIO_ODD interrupt vector in NVIC */
