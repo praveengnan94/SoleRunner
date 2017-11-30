@@ -16,7 +16,7 @@
 #define EM3 3
 #define COMPMAX 500
 
-#define block_sleep_mode 0
+#define block_sleep_mode 3
 
 #define LF_CLK 32768
 #define ULF_CLK 1000

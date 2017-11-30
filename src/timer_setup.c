@@ -8,7 +8,7 @@
 #include "timer_setup.h"
 int hrcount;
 int glb_ct=0;
-uint32_t adc_array[1000];
+uint32_t adc_array[100];
 
 void LETIMER0_IRQHandler(void)
 {
@@ -16,6 +16,7 @@ void LETIMER0_IRQHandler(void)
 	hrcount=(hrcount+1)%50;
 	if((LETIMER0->IF & LETIMER_IF_COMP1)!=0)//IF COMP1 FLAG IS SET IN LETIMER0->IF
 	{
+		ADC0->CMD = ADC_CMD_SINGLESTART;
 	  LETIMER_IntClear(LETIMER0, LETIMER_IF_COMP1);
 	}
 
@@ -25,23 +26,20 @@ void LETIMER0_IRQHandler(void)
 		 LETIMER_IntClear(LETIMER0, LETIMER_IF_UF);
 		if(hrcount==1)
 		{
-			ADC0->CMD = ADC_CMD_SINGLESTART;
 		  GPIO_PinModeSet(HR_PWR_PORT, HR_PWR_PIN, gpioModePushPull, 1);
 		}
-		else if(hrcount==6)
+		else if(hrcount==40)
 		{
 		  //ADC read
-
-		 while (ADC0->STATUS & ADC_STATUS_SINGLEACT) ;
-
-		  adc_array[glb_ct]=ADC0->SINGLEDATA;
-			adc_array[glb_ct]=ADC_DataSinglePeek(ADC0);
+		  ADC0->CMD =  ADC_CMD_SINGLESTART;
+		  while (ADC0->STATUS & ADC_STATUS_SINGLEACT);
+		  adc_array[glb_ct]=ADC_DataSingleGet(ADC0);
 		  glb_ct++;
-		  if(glb_ct==50)
+		  if(glb_ct==100)
+		  {
 			  glb_ct=0;
-//		  adc_array[1]=ADC_DataSinglePeek(ADC0);
-		  GPIO_PinModeSet(HR_PWR_PORT, HR_PWR_PIN, gpioModePushPull, 0);
-//		  ADC_Start(ADC0,ADC_CMD_SINGLESTOP);
+		  }
+//		  GPIO_PinModeSet(HR_PWR_PORT, HR_PWR_PIN, gpioModePushPull, 0);
 		  ADC0->CMD =  ADC_CMD_SINGLESTOP;
 		}
 	}

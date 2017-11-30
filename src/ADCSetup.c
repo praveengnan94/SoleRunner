@@ -61,19 +61,20 @@ void ADCSetup(void)
 	ADC_InitSingle_TypeDef singleInit =
 	{
 	  .prsSel 							= adcPRSSELCh0,          /* PRS ch0 (if enabled). */
-	  .acqTime 							= adcAcqTime1,            /* 2 ADC_CLK cycle acquisition time. */
-	  .reference 						= adcRef2V5,          /* 1.25V internal reference for temp measurement*/
-	  .resolution 						= adcRes8Bit,         /* 12 bit resolution. */
+	  .acqTime 							= adcAcqTime8,            /* 2 ADC_CLK cycle acquisition time. */
+	  .reference 						= adcRefVDD,          /* 1.25V internal reference for temp measurement*/
+	  .resolution 						= adcRes12Bit,         /* 12 bit resolution. */
 	  .input 							= adcSingleInpCh6,	     /* Temp input selected. */
 	  .diff 							= false,                 /* Single ended input. */
 	  .prsEnable 						= false,                  /* PRS disabled. */
 	  .leftAdjust 						= false,                 /* Right adjust. */
 	  .rep 								= false                   /* Conversion to continue after one read. */
 	};
+  ADC0->SINGLECTRL |= ADC_SINGLECTRL_INPUTSEL_CH6|_ADC_SINGLECTRL_PRSSEL_PRSCH6;
 
-	ADC_Init(adc_channel, &init);
+  ADC_Init(adc_channel, &init);
   ADC_InitSingle(adc_channel, &singleInit);
-  ADC0->SINGLECTRL |= ADC_SINGLECTRL_REP;
+
 
 //  ADC_Start(ADC0, adcStartSingle);
 //  ADC0->IEN= 0x01;

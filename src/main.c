@@ -19,10 +19,6 @@ int main(void)
   gpio_setup();
 
   ADCSetup();
-
-//
-//  uart0_init();
-//
 //  i2c_setup();
   timer_setup();
 //

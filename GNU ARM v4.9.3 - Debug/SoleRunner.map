@@ -32,7 +32,7 @@ read_pntr           0x4               ./src/ADCSetup.o
 SystemCoreClock     0x4               ./CMSIS/EFM32LG/system_efm32lg.o
 adc_complete        0x4               ./src/ADCSetup.o
 i                   0x2               ./src/ADCSetup.o
-adc_array           0xfa0             ./src/timer_setup.o
+adc_array           0x190             ./src/timer_setup.o
 glbl_write          0x4               ./src/ADCSetup.o
 circular_buffer     0x64              ./src/ADCSetup.o
 write_pntr          0x4               ./src/ADCSetup.o
@@ -1531,44 +1531,44 @@ LOAD c:/siliconlabs/simplicitystudio/v4/developer/toolchains/gnu_arm/4.9_2015q3/
                 0x0000205c       0x4c ./src/ADCSetup.o
                 0x0000205c                ADC0_IRQHandler
  .text.ADCSetup
-                0x000020a8       0x70 ./src/ADCSetup.o
+                0x000020a8       0x74 ./src/ADCSetup.o
                 0x000020a8                ADCSetup
  .text.SystemCoreClockUpdate
-                0x00002118        0xc ./src/CMU.o
+                0x0000211c        0xc ./src/CMU.o
  .text.CMU_setup
-                0x00002124       0xe0 ./src/CMU.o
-                0x00002124                CMU_setup
+                0x00002128       0xe0 ./src/CMU.o
+                0x00002128                CMU_setup
  .text.gpio_setup
-                0x00002204       0x30 ./src/gpio_setup.o
-                0x00002204                gpio_setup
+                0x00002208       0x30 ./src/gpio_setup.o
+                0x00002208                gpio_setup
  .text.CHIP_Init
-                0x00002234       0x40 ./src/main.o
- .text.main     0x00002274       0x24 ./src/main.o
-                0x00002274                main
+                0x00002238       0x40 ./src/main.o
+ .text.main     0x00002278       0x24 ./src/main.o
+                0x00002278                main
  .text.INT_Disable
-                0x00002298       0x2c ./src/sleep.o
+                0x0000229c       0x2c ./src/sleep.o
  .text.INT_Enable
-                0x000022c4       0x3c ./src/sleep.o
+                0x000022c8       0x3c ./src/sleep.o
  .text.EMU_EnterEM1
-                0x00002300       0x20 ./src/sleep.o
+                0x00002304       0x20 ./src/sleep.o
  .text.BlockSleep
-                0x00002320       0x2c ./src/sleep.o
-                0x00002320                BlockSleep
- .text.sleep    0x0000234c       0x40 ./src/sleep.o
-                0x0000234c                sleep
+                0x00002324       0x2c ./src/sleep.o
+                0x00002324                BlockSleep
+ .text.sleep    0x00002350       0x40 ./src/sleep.o
+                0x00002350                sleep
  .text.NVIC_EnableIRQ
-                0x0000238c       0x30 ./src/timer_setup.o
+                0x00002390       0x30 ./src/timer_setup.o
  .text.INT_Disable
-                0x000023bc       0x2c ./src/timer_setup.o
+                0x000023c0       0x2c ./src/timer_setup.o
  .text.INT_Enable
-                0x000023e8       0x3c ./src/timer_setup.o
+                0x000023ec       0x3c ./src/timer_setup.o
  .text.LETIMER_IntClear
-                0x00002424       0x1c ./src/timer_setup.o
- .text.ADC_DataSinglePeek
-                0x00002440       0x18 ./src/timer_setup.o
+                0x00002428       0x1c ./src/timer_setup.o
+ .text.ADC_DataSingleGet
+                0x00002444       0x18 ./src/timer_setup.o
  .text.LETIMER0_IRQHandler
-                0x00002458       0xdc ./src/timer_setup.o
-                0x00002458                LETIMER0_IRQHandler
+                0x0000245c       0xd8 ./src/timer_setup.o
+                0x0000245c                LETIMER0_IRQHandler
  .text.timer_setup
                 0x00002534       0x74 ./src/timer_setup.o
                 0x00002534                timer_setup
@@ -1688,7 +1688,7 @@ LOAD c:/siliconlabs/simplicitystudio/v4/developer/toolchains/gnu_arm/4.9_2015q3/
 .igot.plt       0x20000074        0x0 load address 0x00002800
  .igot.plt      0x00000000        0x0 c:/siliconlabs/simplicitystudio/v4/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7-m/crtbegin.o
 
-.bss            0x20000074     0x105c load address 0x00002800
+.bss            0x20000074      0x24c load address 0x00002800
                 0x20000074                . = ALIGN (0x4)
                 0x20000074                __bss_start__ = .
  *(.bss*)
@@ -1713,24 +1713,24 @@ LOAD c:/siliconlabs/simplicitystudio/v4/developer/toolchains/gnu_arm/4.9_2015q3/
                 0x20000118                write_pntr
  COMMON         0x2000011c       0x10 ./src/sleep.o
                 0x2000011c                EnergyMode
- COMMON         0x2000012c      0xfa4 ./src/timer_setup.o
+ COMMON         0x2000012c      0x194 ./src/timer_setup.o
                 0x2000012c                hrcount
                 0x20000130                adc_array
-                0x200010d0                . = ALIGN (0x4)
-                0x200010d0                __bss_end__ = .
+                0x200002c0                . = ALIGN (0x4)
+                0x200002c0                __bss_end__ = .
 
-.heap           0x200010d0      0xc00
-                0x200010d0                __HeapBase = .
-                0x200010d0                __end__ = .
-                0x200010d0                end = __end__
-                0x200010d0                _end = __end__
+.heap           0x200002c0      0xc00
+                0x200002c0                __HeapBase = .
+                0x200002c0                __end__ = .
+                0x200002c0                end = __end__
+                0x200002c0                _end = __end__
  *(.heap*)
- .heap          0x200010d0      0xc00 ./CMSIS/EFM32LG/startup_gcc_efm32lg.o
-                0x20001cd0                __HeapLimit = .
+ .heap          0x200002c0      0xc00 ./CMSIS/EFM32LG/startup_gcc_efm32lg.o
+                0x20000ec0                __HeapLimit = .
 
-.stack_dummy    0x200010d0      0x400
+.stack_dummy    0x200002c0      0x400
  *(.stack*)
- .stack         0x200010d0      0x400 ./CMSIS/EFM32LG/startup_gcc_efm32lg.o
+ .stack         0x200002c0      0x400 ./CMSIS/EFM32LG/startup_gcc_efm32lg.o
                 0x20008000                __StackTop = (ORIGIN (RAM) + 0x8000)
                 0x20007c00                __StackLimit = (__StackTop - SIZEOF (.stack_dummy))
                 0x20008000                PROVIDE (__stack, __StackTop)
@@ -1814,7 +1814,7 @@ OUTPUT(SoleRunner.axf elf32-littlearm)
  .comment       0x00000000       0x71 ./src/sleep.o
  .comment       0x00000000       0x71 ./src/timer_setup.o
 
-.debug_line     0x00000000     0x39cb
+.debug_line     0x00000000     0x39d2
  .debug_line    0x00000000       0x72 ./CMSIS/EFM32LG/startup_gcc_efm32lg.o
  .debug_line    0x00000072      0x306 ./CMSIS/EFM32LG/system_efm32lg.o
  .debug_line    0x00000378      0x3a0 ./emlib/em_adc.o
@@ -1831,9 +1831,9 @@ OUTPUT(SoleRunner.axf elf32-littlearm)
  .debug_line    0x00002f7d      0x205 ./src/gpio_setup.o
  .debug_line    0x00003182      0x23f ./src/main.o
  .debug_line    0x000033c1      0x297 ./src/sleep.o
- .debug_line    0x00003658      0x373 ./src/timer_setup.o
+ .debug_line    0x00003658      0x37a ./src/timer_setup.o
 
-.debug_info     0x00000000     0x70a7
+.debug_info     0x00000000     0x70a6
  .debug_info    0x00000000       0xa0 ./CMSIS/EFM32LG/startup_gcc_efm32lg.o
  .debug_info    0x000000a0      0x582 ./CMSIS/EFM32LG/system_efm32lg.o
  .debug_info    0x00000622      0xa91 ./emlib/em_adc.o
@@ -1850,7 +1850,7 @@ OUTPUT(SoleRunner.axf elf32-littlearm)
  .debug_info    0x00005e6d      0x21b ./src/gpio_setup.o
  .debug_info    0x00006088      0x26e ./src/main.o
  .debug_info    0x000062f6      0x45b ./src/sleep.o
- .debug_info    0x00006751      0x956 ./src/timer_setup.o
+ .debug_info    0x00006751      0x955 ./src/timer_setup.o
 
 .debug_abbrev   0x00000000     0x17ec
  .debug_abbrev  0x00000000       0x14 ./CMSIS/EFM32LG/startup_gcc_efm32lg.o
@@ -1941,7 +1941,7 @@ OUTPUT(SoleRunner.axf elf32-littlearm)
  .debug_ranges  0x00000480       0x38 ./src/sleep.o
  .debug_ranges  0x000004b8       0x40 ./src/timer_setup.o
 
-.debug_str      0x00000000     0x2ccb
+.debug_str      0x00000000     0x2cca
  .debug_str     0x00000000      0x432 ./CMSIS/EFM32LG/system_efm32lg.o
                                 0x4b9 (size before relaxing)
  .debug_str     0x00000432      0x92f ./emlib/em_adc.o
@@ -1972,8 +1972,8 @@ OUTPUT(SoleRunner.axf elf32-littlearm)
                                 0x2dc (size before relaxing)
  .debug_str     0x00002c18       0x3f ./src/sleep.o
                                 0x33a (size before relaxing)
- .debug_str     0x00002c57       0x74 ./src/timer_setup.o
-                                0x970 (size before relaxing)
+ .debug_str     0x00002c57       0x73 ./src/timer_setup.o
+                                0x96f (size before relaxing)
 
 .debug_frame    0x00000000     0x15cc
  .debug_frame   0x00000000      0x180 ./CMSIS/EFM32LG/system_efm32lg.o
