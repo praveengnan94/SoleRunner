@@ -16,7 +16,7 @@
 #define EM3 3
 #define COMPMAX 500
 
-#define block_sleep_mode 3
+#define block_sleep_mode 0
 
 #define LF_CLK 32768
 #define ULF_CLK 1000
@@ -28,39 +28,30 @@
 #define HR_PWR_PIN				 7U
 #define ADC_PORT_HR    			 gpioPortD
 #define ADC_PIN_HR				 6U
-#define LETIMER_PERIOD 0.001
-#define LED_ON_TIME 0.01	//1 milli second
+#define COMP0TIME 0.001
+#define COMP1TIME 0.01	//1 milli second
 
 //DEFINTIONS FOR I2C PINS AND PORTS
 
 #define i2c_sda_port gpioPortC
 #define i2c_sda_pin 4U
-#define i2c_sda_port_mode gpioModeWiredAnd
+#define i2c_sda_port_mode gpioModeWiredAndPullUp
 
 #define i2c_scl_port gpioPortC
 #define i2c_scl_pin 5U
-#define i2c_scl_port_mode gpioModeWiredAnd
+#define i2c_scl_port_mode gpioModeWiredAndPullUp
 
-#define i2c_int_mg_port gpioPortB
-#define i2c_int_mg_pin 12U
-#define i2c_int_mg_port_mode gpioModeInput
-#define i2c_int_mg_rising_edge true
-#define i2c_int_mg_falling_edge true
-#define i2c_int_mg_enable true
-#define i2c_int_mg_disable false
-
-#define i2c_int_xl_port gpioPortD
-#define i2c_int_xl_pin 5U
-#define i2c_int_xl_port_mode gpioModeInput
-#define i2c_int_xl_rising_edge true
-#define i2c_int_xl_falling_edge true
-#define i2c_int_xl_enable true
-#define i2c_int_xl_disable false
-
-#define ACCEL_I2C_ADDRESS 0X1DU
-#define MAGNETOMETER_I2C_ADDRESS 0X1EU
+#define NFC_I2C_ADDRESS 0Xaa
 #define wr_bit 0
 #define rd_bit 1
+
+//DEFININTIONS FOR I2C INIT REGISTER
+#define i2c_enable_init true
+#define i2c_master_init true
+#define i2c_refFreq_init 0
+#define i2c_freq_init I2C_FREQ_STANDARD_MAX
+#define i2c_clhr_init i2cClockHLRStandard
+#define I2C_EM EM1			//I2C ENERGY MODE REGISTER
 
 #define i2c_int_port_mode gpioModeInput
 
@@ -68,7 +59,7 @@
 #define i2c_int_falling_edge true
 #define i2c_int_enable true
 #define i2c_int_disable false
-#define i2c_location _I2C_ROUTE_LOCATION_LOC0
+#define i2c_location I2C_ROUTE_LOCATION_LOC0
 #define i2c_scl_enable I2C_ROUTE_SCLPEN
 #define i2c_sda_enable I2C_ROUTE_SDAPEN
 

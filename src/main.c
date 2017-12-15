@@ -19,14 +19,16 @@ int main(void)
   gpio_setup();
 
   ADCSetup();
-//  i2c_setup();
+  i2c_setup();
   timer_setup();
-//
+  uart0_init();
+
+
 //  LESENSE_setup();
 
 /* Infinite loop */
   while (1)
   {
-	  sleep();
+//	  sleep();
   }
 }

@@ -44,6 +44,7 @@ void CMU_setup()//Reference main_letimer_rtc_pulses.c-> LETIMER_Setup(void)
   /* Set clock divider for LESENSE. */
   CMU_ClockDivSet(cmuClock_LESENSE, cmuClkDiv_1);
 
+
 	if(block_sleep_mode== EM3)
 	{
 		CMU_ClockSelectSet(cmuClock_LFA,cmuSelect_ULFRCO);
@@ -58,6 +59,7 @@ void CMU_setup()//Reference main_letimer_rtc_pulses.c-> LETIMER_Setup(void)
 
 	  CMU_ClockEnable(cmuClock_LETIMER0, true);
 	  CMU_ClockEnable(cmuClock_GPIO, true);
+
 }
 
 
