@@ -11,6 +11,7 @@ void CMU_setup()//Reference main_letimer_rtc_pulses.c-> LETIMER_Setup(void)
 	/* Ensure core frequency has been updated */
 	  SystemCoreClockUpdate();
 
+	  CMU_OscillatorEnable(cmuOsc_HFRCO, true, true);			// Enable HFRC0
 	  /* Select clock source for HF clock. */
 	   CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFRCO);
 	   /* Select clock source for LFA clock. */
@@ -33,6 +34,7 @@ void CMU_setup()//Reference main_letimer_rtc_pulses.c-> LETIMER_Setup(void)
 	CMU_ClockEnable(cmuClock_DMA, true);
 	CMU_ClockEnable(cmuClock_I2C1,true);
 	CMU_ClockEnable(cmuClock_LEUART0,true);
+	CMU_ClockEnable(cmuClock_USART0, true);
 
 	  /* Enable clock on RTC. */
 	  CMU_ClockEnable(cmuClock_RTC, true);
@@ -43,7 +45,7 @@ void CMU_setup()//Reference main_letimer_rtc_pulses.c-> LETIMER_Setup(void)
   CMU_ClockEnable(cmuClock_LESENSE, true);
   /* Set clock divider for LESENSE. */
   CMU_ClockDivSet(cmuClock_LESENSE, cmuClkDiv_1);
-
+  CMU_ClockEnable(cmuClock_TIMER0, true);
 
 	if(block_sleep_mode== EM3)
 	{

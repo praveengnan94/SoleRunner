@@ -50,7 +50,6 @@ unsigned int minutes,hours;
 
 
 unsigned int global_buffer[255];
-unsigned int LAST_WRITTEN_ADDRESS;
 unsigned int LAST_WRITTEN_VALUE;
 int FDONflag;
 
@@ -76,6 +75,24 @@ int FDONflag;
 #define i2c_location I2C_ROUTE_LOCATION_LOC0
 #define i2c_scl_enable I2C_ROUTE_SCLPEN
 #define i2c_sda_enable I2C_ROUTE_SDAPEN
+
+//SPI Accelerometer
+// SPI bus pins
+#define SPI_MOSI_port		gpioPortE	// MOSI PC6
+#define SPI_MOSI_pin		10
+#define SPI_MISO_port		gpioPortE	// MISO PC7
+#define SPI_MISO_pin		11
+#define SPI_SCK_port		gpioPortE	// SCK PC8
+#define SPI_SCK_pin			12
+#define SPI_CS_port			gpioPortE	// CS PC9
+#define SPI_CS_pin			13
+
+#define SPI_PWR_port		gpioPortE	// CS PC9
+#define SPI_PWR_pin			14
+#define SPI_PWR_default		1
+
+#define INITIAL_LEVEL_LOW   0
+#define INITIAL_LEVEL_HIGH  1
 
 //UART DEFITIONS
 #define LEUART0_PORT gpioPortD

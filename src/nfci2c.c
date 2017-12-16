@@ -61,9 +61,9 @@ void i2c_nfc_write()
    	   while((I2C1->IF & I2C_IF_ACK)==0);
 }
 
-void i2c_wr_to_nfc(uint16_t reg,uint8_t val[16])
+void i2c_wr_to_nfc(uint16_t reg)
 {
-	i2c_nfc_write();
+	i2c_nfc_writeauto();
 	I2C1->IFC=I2C_IFC_ACK;
 
 	I2C1->TXDATA = (reg);
@@ -72,14 +72,19 @@ void i2c_wr_to_nfc(uint16_t reg,uint8_t val[16])
 
 	for(int i=0;i<16;i++)
 	{
-//		I2C1->TXDATA = (val[i]);
-		I2C1->TXDATA = 0xDA;
+		I2C1->TXDATA = global_buffer+i;
 		while((I2C1->IF & I2C_IF_ACK)==0);
 		I2C1->IFC=I2C_IFC_ACK;
+		if (i == (16 - 2))
+		{
+			I2C1->CTRL &= ~I2C_CTRL_AUTOACK;
+		}
 	}
 
 	I2C1->CMD=I2C_CMD_NACK;
 	I2C1->CMD=I2C_CMD_STOP;
+	for(long int i=0;i<500;i++);
+
 }
 
 void i2c_rd_from_nfc(uint8_t regi)
@@ -199,16 +204,15 @@ void i2c_reset(void)
 
 void i2c_setup(void)
 {
-
+	long int reg;
 	load_poweron();
 	i2c_reset();
 
-	uint8_t reg=0x08;
-//	i2c_wr_to_nfc(reg,write_data);
-//	reg=0x09;
-//	i2c_wr_to_nfc(reg,write_data);
+//	i2c_wr_to_nfc(0x08);
 
 }
+
+unsigned int LAST_WRITTEN_ADDRESS=0x08;
 
 void GPIO_ODD_IRQHandler(void){
 	int intFlags;
@@ -218,10 +222,11 @@ void GPIO_ODD_IRQHandler(void){
 	if(FDONflag==0)//0 means FD is ON
 	{
 		FDONflag=1;
-
+		i2c_wr_to_nfc(0x08);
 		//Start transmitting data from global buffer to NTAG via i2c to LAST_WRITTEN_ADDRESS
 //		i2c_wr_to_nfc(LAST_WRITTEN_ADDRESS,global_buffer[LAST_WRITTEN_ADDRESS]);
-//		LAST_WRITTEN_ADDRESS=((LAST_WRITTEN_ADDRESS+16)%255);
+		i2c_wr_to_nfc(0x08+LAST_WRITTEN_ADDRESS);
+		LAST_WRITTEN_ADDRESS=((LAST_WRITTEN_ADDRESS+16)%255);
 	}
 	else
 	{

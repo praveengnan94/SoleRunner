@@ -103,7 +103,6 @@ void LETIMER0_IRQHandler(void)
 			  BPM=valid_count*(60/((HR_COUNT-5)/1000));
 
 			  sprintf(global_buffer+LAST_WRITTEN_VALUE,"H%03d%02d%02d",BPM,hours,minutes);
-
 			  LAST_WRITTEN_VALUE=(LAST_WRITTEN_VALUE+8)%255;
 
 			  LEUART_Tx(LEUART0,BPM);
