@@ -6,8 +6,7 @@
  */
 
 #include "nfci2c.h"
-unsigned int datax_xl,data1,data2,val1,val2,val_0,val_1=0,i2c_int_flag,datay_xl,dataz_xl,datax,datay,dataz,datax_mg,datay_mg,dataz_mg,data;
-int new_data,look_for_30,look_for_15,look_for_45,look_for_n15,look_for_n30,look_for_n45,look_for_0;
+uint8_t data1,data,read_data[16],write_data[16];
 
 
 void load_poweron()
@@ -47,52 +46,132 @@ void load_poweroff()
 	CMU_ClockEnable(cmuClock_I2C1,false);
 }
 
+void i2c_nfc_writeauto()
+{
+	I2C1->CTRL |= I2C_CTRL_AUTOACK;
+	I2C1->TXDATA = (NFC_I2C_ADDRESS<<1)|wr_bit;
+    I2C1->CMD=I2C_CMD_START;
+   	   while((I2C1->IF & I2C_IF_ACK)==0);
+}
+
 void i2c_nfc_write()
 {
-//	I2C1->TXDATA = (NFC_I2C_ADDRESS<<1)|wr_bit;
-	I2C1->TXDATA = NFC_I2C_ADDRESS;
-		   I2C1->CMD=I2C_CMD_START;
-		   while((I2C1->IF & I2C_IF_ACK)==0);
+	I2C1->TXDATA = (NFC_I2C_ADDRESS<<1)|wr_bit;
+    I2C1->CMD=I2C_CMD_START;
+   	   while((I2C1->IF & I2C_IF_ACK)==0);
 }
 
-void i2c_wr_to_nfc_reg(uint16_t reg,uint16_t val)
+void i2c_wr_to_nfc(uint16_t reg,uint8_t val[16])
 {
 	i2c_nfc_write();
-	     I2C1->IFC=I2C_IFC_ACK;
+	I2C1->IFC=I2C_IFC_ACK;
 
-	     I2C1->TXDATA = (reg);
-	     while((I2C1->IF & I2C_IF_ACK)==0);
-		I2C1->IFC=I2C_IFC_ACK;
+	I2C1->TXDATA = (reg);
+	while((I2C1->IF & I2C_IF_ACK)==0);
+	I2C1->IFC=I2C_IFC_ACK;
 
-		I2C1->TXDATA = (val);
+	for(int i=0;i<16;i++)
+	{
+//		I2C1->TXDATA = (val[i]);
+		I2C1->TXDATA = 0xDA;
 		while((I2C1->IF & I2C_IF_ACK)==0);
-			I2C1->IFC=I2C_IFC_ACK;
+		I2C1->IFC=I2C_IFC_ACK;
+	}
 
-			I2C1->CMD=I2C_CMD_STOP;
+	I2C1->CMD=I2C_CMD_NACK;
+	I2C1->CMD=I2C_CMD_STOP;
 }
-uint32_t i2c_rd_from_nfc_reg(uint8_t regi)
+
+void i2c_rd_from_nfc(uint8_t regi)
 {
-	data=0;
-//	i2c_nfc_write();
-			     I2C1->IFC=I2C_IFC_ACK;
+	i2c_nfc_writeauto();
+	I2C1->IFC=I2C_IFC_ACK;
 
-	   I2C1->TXDATA = (regi);
-	   while((I2C1->IF & I2C_IF_ACK)==0);
-	   I2C1->IFC=I2C_IFC_ACK;
+	I2C1->TXDATA = (regi);
+	while((I2C1->IF & I2C_IF_ACK)==0);
+	I2C1->IFC=I2C_IFC_ACK;
 
-	   I2C1->CMD=I2C_CMD_START;	//START EXECUTED ONCE FOR REPEATED START
-	   I2C1->TXDATA = (NFC_I2C_ADDRESS<<1)|rd_bit;
-	   while((I2C1->IF & I2C_IF_ACK)==0);
-	   I2C1->IFC=I2C_IFC_ACK;
+	I2C1->CMD=I2C_CMD_STOP;
 
-	   //I2C1->CMD=I2C_CMD_ACK;
-	   while((I2C1->STATUS & I2C_STATUS_RXDATAV)==0);
-	   data=I2C1->RXDATA;
+	for(int i=0;i<400;i++);
 
-	   I2C1->CMD=I2C_CMD_NACK;
-	   I2C1->CMD=I2C_CMD_STOP;
+	I2C1->CMD=I2C_CMD_START;	//START EXECUTED ONCE FOR REPEATED START
+	I2C1->TXDATA = (NFC_I2C_ADDRESS<<1)|rd_bit;
 
-	   return data;
+	while((I2C1->IF & I2C_IF_ACK)==0);
+	I2C1->IFC=I2C_IFC_ACK;
+
+	//I2C1->CMD=I2C_CMD_ACK;
+	for (int i = 0; i < 16; i++)
+	{
+		while((I2C1->STATUS & I2C_STATUS_RXDATAV)==0);
+		read_data[i]=I2C1->RXDATA;
+		if (i == (16 - 2))
+		{
+			I2C1->CTRL &= ~I2C_CTRL_AUTOACK;
+		}
+	}
+
+	I2C1->CMD=I2C_CMD_NACK;
+	I2C1->CMD=I2C_CMD_STOP;
+
+}
+
+uint8_t i2c_rd_from_nfc_reg(uint8_t mema,uint8_t regi)
+{
+	i2c_nfc_write();
+	I2C1->IFC=I2C_IFC_ACK;
+
+	I2C1->TXDATA = (mema);
+	while((I2C1->IF & I2C_IF_ACK)==0);
+	I2C1->IFC=I2C_IFC_ACK;
+
+	I2C1->TXDATA = (regi);
+	while((I2C1->IF & I2C_IF_ACK)==0);
+	I2C1->IFC=I2C_IFC_ACK;
+
+	I2C1->CMD=I2C_CMD_STOP;
+
+	for(int i=0;i<500;i++);
+
+	I2C1->CMD=I2C_CMD_START;	//START EXECUTED ONCE FOR REPEATED START
+	I2C1->TXDATA = (NFC_I2C_ADDRESS<<1)|rd_bit;
+
+	while((I2C1->IF & I2C_IF_ACK)==0);
+	I2C1->IFC=I2C_IFC_ACK;
+
+	while ((I2C1->IF & I2C_IF_RXDATAV) == 0);
+	data = I2C0->RXDATA;
+
+	I2C1->CMD=I2C_CMD_NACK;
+	I2C1->CMD = I2C_CMD_STOP;
+
+	return data;
+}
+
+void i2c_wr_to_nfc_reg(uint8_t mema,uint8_t regi,uint8_t mask,uint8_t regdata)
+{
+	i2c_nfc_write();
+	I2C1->IFC=I2C_IFC_ACK;
+
+	I2C1->TXDATA = (mema);
+	while((I2C1->IF & I2C_IF_ACK)==0);
+	I2C1->IFC=I2C_IFC_ACK;
+
+	I2C1->TXDATA = (regi);
+	while((I2C1->IF & I2C_IF_ACK)==0);
+	I2C1->IFC=I2C_IFC_ACK;
+
+	I2C1->TXDATA = (mask);
+	while((I2C1->IF & I2C_IF_ACK)==0);
+	I2C1->IFC=I2C_IFC_ACK;
+
+	I2C1->TXDATA = (regdata);
+	while((I2C1->IF & I2C_IF_ACK)==0);
+	I2C1->IFC=I2C_IFC_ACK;
+
+	I2C1->CMD=I2C_CMD_NACK;
+	I2C1->CMD = I2C_CMD_STOP;
 }
 
 void i2c_reset(void)
@@ -120,52 +199,36 @@ void i2c_reset(void)
 
 void i2c_setup(void)
 {
+
 	load_poweron();
 	i2c_reset();
 
-	//ACCELEROMETER CONFIGURATION
-    i2c_wr_to_nfc_reg(0x60,0);
-//
-//	i2c_wr_to_accel_reg(CTRL_REG1_A, CTRL_REG1_A_CONFG);
-//	i2c_wr_to_accel_reg(CTRL_REG2_A, CTRL_REG2_A_CONFG);
-//	i2c_wr_to_accel_reg(CTRL_REG4_A, CTRL_REG4_A_CONFG);
-//	//i2c_wr_to_accel_reg(ACT_THS_A,ACT_THS_A_VAL);
-//
-//    i2c_wr_to_accel_reg(IG_THS_X1_A,IG_THS_X1_A_VAL);
-//	i2c_wr_to_accel_reg(IG_THS_Y1_A,IG_THS_Y1_A_VAL);
-//	i2c_wr_to_accel_reg(IG_THS_Z1_A,IG_THS_Z1_A_VAL);
-////	i2c_wr_to_accel_reg(IG_DUR1_A,IG_DUR1_A_VAL);
-//
-//	i2c_wr_to_accel_reg(IG_CFG1_A, IG_CFG1_A_CONFG);
-//    i2c_wr_to_accel_reg(CTRL_REG3_A, CTRL_REG3_A_CONFG);
-    look_for_0=1;
+	uint8_t reg=0x08;
+//	i2c_wr_to_nfc(reg,write_data);
+//	reg=0x09;
+//	i2c_wr_to_nfc(reg,write_data);
 
-
-//   while(1)
-//   {
-//   }
 }
 
-/*void GPIO_ODD_IRQHandler(void)
-{
-	INT_Disable();
-//	GPIO_IntConfig(i2c_int_xl_port, i2c_int_xl_pin,  i2c_int_xl_rising_edge, i2c_int_xl_falling_edge, i2c_int_xl_disable);
-//	GPIO_IntConfig(i2c_int_xl_port, i2c_int_xl_pin,  i2c_int_xl_rising_edge, i2c_int_xl_falling_edge, i2c_int_xl_enable);
-//	GPIO_IntClear(0x02);
-//	data1=i2c_rd_from_ACCEL_reg(ACCEL_X_LSB);
-//	data2=i2c_rd_from_ACCEL_reg(ACCEL_X_MSB);
-//	datax_xl=(data2<<8)+data1;
-//
-//	data1=i2c_rd_from_ACCEL_reg(ACCEL_Y_LSB);
-//	data2=i2c_rd_from_ACCEL_reg(ACCEL_Y_MSB);
-//	datay_xl=(data2<<8)+data1;
-//
-//	data1=i2c_rd_from_ACCEL_reg(ACCEL_Z_LSB);
-//	data2=i2c_rd_from_ACCEL_reg(ACCEL_Z_MSB);
-//	dataz_xl=(data2<<8)+data1;
-//
-//	templ=i2c_rd_from_MAGNETOMETER_reg(MAG_TEMPL);
+void GPIO_ODD_IRQHandler(void){
+	int intFlags;
 
-  INT_Enable();
-}*/
+	intFlags = GPIO->IF;
+	GPIO->IFC = intFlags & 0x0000aaaa;	/* GPIO even interrupt handler so only clear even interrupts */
+	if(FDONflag==0)//0 means FD is ON
+	{
+		FDONflag=1;
+
+		//Start transmitting data from global buffer to NTAG via i2c to LAST_WRITTEN_ADDRESS
+//		i2c_wr_to_nfc(LAST_WRITTEN_ADDRESS,global_buffer[LAST_WRITTEN_ADDRESS]);
+//		LAST_WRITTEN_ADDRESS=((LAST_WRITTEN_ADDRESS+16)%255);
+	}
+	else
+	{
+		FDONflag=0;
+//		load_poweroff();
+
+	}
+
+}
 

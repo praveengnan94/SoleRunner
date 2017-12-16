@@ -42,7 +42,7 @@ void LETIMER0_IRQHandler(void)
 		 LETIMER_IntClear(LETIMER0, LETIMER_IF_UF);
 		if(hrcount==1)
 		{
-		  GPIO_PinModeSet(HR_PWR_PORT, HR_PWR_PIN, gpioModePushPull, 0);
+		  GPIO_PinModeSet(HR_PWR_PORT, HR_PWR_PIN, gpioModePushPull, 1);
 
 		}
 		else if(hrcount>=5)
@@ -58,9 +58,11 @@ void LETIMER0_IRQHandler(void)
 		  if(glb_ct==HR_COUNT)
 		  {
 			  first_flag=true;
-			  GPIO_PinModeSet(HR_PWR_PORT, HR_PWR_PIN, gpioModePushPull, 1);
+			  GPIO_PinModeSet(HR_PWR_PORT, HR_PWR_PIN, gpioModePushPull, 0);
+			  LETIMER0->IEN&=0xFFF9;//DISABLE COMP0(UF) AND COMP1 INTERRUPTS
 			  ADC0->CMD =  ADC_CMD_SINGLESTOP;
 			  glb_ct=0;
+			  hrcount=0;
 			  for(int i=0;i<HR_COUNT;i++)
 			  {
 				  if(first_flag==true)
@@ -99,6 +101,11 @@ void LETIMER0_IRQHandler(void)
 				  }
 			  }
 			  BPM=valid_count*(60/((HR_COUNT-5)/1000));
+
+			  sprintf(global_buffer+LAST_WRITTEN_VALUE,"H%03d%02d%02d",BPM,hours,minutes);
+
+			  LAST_WRITTEN_VALUE=(LAST_WRITTEN_VALUE+8)%255;
+
 			  LEUART_Tx(LEUART0,BPM);
 			  //write to NANDFLASH with timestamp
 			  valid_count=0;
@@ -155,8 +162,6 @@ void timer_setup(void)
   //	  BlockSleep(block_sleep_mode);
   	  /* Enable LETIMER0 interrupt vector in NVIC*/
   	    NVIC_EnableIRQ(LETIMER0_IRQn);
-  	  LETIMER0->IEN|=LETIMER_IF_UF|LETIMER_IF_COMP1;//ENABLE COMP0(UF) AND COMP1 INTERRUPTS
-//  	  LETIMER0->IEN|=LETIMER_IF_COMP1;
+
 
 }
-

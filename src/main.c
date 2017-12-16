@@ -20,11 +20,11 @@ int main(void)
 
   ADCSetup();
   i2c_setup();
+  rtcSetup();
   timer_setup();
   uart0_init();
 
 
-//  LESENSE_setup();
 
 /* Infinite loop */
   while (1)

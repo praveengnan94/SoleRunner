@@ -14,9 +14,8 @@
 #define EM1 1
 #define EM2 2
 #define EM3 3
-#define COMPMAX 500
 
-#define block_sleep_mode 0
+#define block_sleep_mode 2
 
 #define LF_CLK 32768
 #define ULF_CLK 1000
@@ -28,8 +27,11 @@
 #define HR_PWR_PIN				 7U
 #define ADC_PORT_HR    			 gpioPortD
 #define ADC_PIN_HR				 6U
-#define COMP0TIME 0.001
-#define COMP1TIME 0.01	//1 milli second
+#define COMP0TIME 0.001		//65 for 60 seconds
+#define COMP1TIME 0.01 //1 milli second
+#define RTC_TIME 6      //in seconds
+
+unsigned int minutes,hours;
 
 //DEFINTIONS FOR I2C PINS AND PORTS
 
@@ -41,9 +43,21 @@
 #define i2c_scl_pin 5U
 #define i2c_scl_port_mode gpioModeWiredAndPullUp
 
-#define NFC_I2C_ADDRESS 0Xaa
+#define Nfc_Fd_Port gpioPortC
+#define Nfc_Fd_Pin 3U
+#define Nfc_Fd_Rising_Int	true
+#define Nfc_Fd_Falling_Int	true
+
+
+unsigned int global_buffer[255];
+unsigned int LAST_WRITTEN_ADDRESS;
+unsigned int LAST_WRITTEN_VALUE;
+int FDONflag;
+
+#define NFC_I2C_ADDRESS 0x55
 #define wr_bit 0
 #define rd_bit 1
+#define MEMA 0xFE
 
 //DEFININTIONS FOR I2C INIT REGISTER
 #define i2c_enable_init true

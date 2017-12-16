@@ -9,6 +9,7 @@ C_SRCS += \
 ../src/gpio_setup.c \
 ../src/main.c \
 ../src/nfci2c.c \
+../src/rtc.c \
 ../src/sleep.c \
 ../src/timer_setup.c \
 ../src/uart.c 
@@ -19,6 +20,7 @@ OBJS += \
 ./src/gpio_setup.o \
 ./src/main.o \
 ./src/nfci2c.o \
+./src/rtc.o \
 ./src/sleep.o \
 ./src/timer_setup.o \
 ./src/uart.o 
@@ -29,6 +31,7 @@ C_DEPS += \
 ./src/gpio_setup.d \
 ./src/main.d \
 ./src/nfci2c.d \
+./src/rtc.d \
 ./src/sleep.d \
 ./src/timer_setup.d \
 ./src/uart.d 
@@ -67,6 +70,13 @@ src/nfci2c.o: ../src/nfci2c.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: GNU ARM C Compiler'
 	arm-none-eabi-gcc -g -gdwarf-2 -mcpu=cortex-m3 -mthumb -std=c99 '-DDEBUG_EFM=1' '-DEFM32LG990F256=1' '-DDEBUG=1' -I"C:/SiliconLabs/SimplicityStudio/v4/developer/sdks/exx32/v4.4.0//kits/EFM32LG_STK3600/examples/blink" -I"C:/SiliconLabs/SimplicityStudio/v4/developer/sdks/exx32/v4.4.0//kits/EFM32LG_STK3600/config" -I"C:/SiliconLabs/SimplicityStudio/v4/developer/sdks/exx32/v4.4.0//CMSIS/Include" -I"C:/SiliconLabs/SimplicityStudio/v4/developer/sdks/exx32/v4.4.0//emlib/inc" -I"C:/SiliconLabs/SimplicityStudio/v4/developer/sdks/exx32/v4.4.0//kits/common/bsp" -I"C:/SiliconLabs/SimplicityStudio/v4/developer/sdks/exx32/v4.4.0//Device/SiliconLabs/EFM32LG/Include" -O0 -Wall -c -fmessage-length=0 -mno-sched-prolog -fno-builtin -ffunction-sections -fdata-sections -MMD -MP -MF"src/nfci2c.d" -MT"src/nfci2c.o" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+src/rtc.o: ../src/rtc.c
+	@echo 'Building file: $<'
+	@echo 'Invoking: GNU ARM C Compiler'
+	arm-none-eabi-gcc -g -gdwarf-2 -mcpu=cortex-m3 -mthumb -std=c99 '-DDEBUG_EFM=1' '-DEFM32LG990F256=1' '-DDEBUG=1' -I"C:/SiliconLabs/SimplicityStudio/v4/developer/sdks/exx32/v4.4.0//kits/EFM32LG_STK3600/examples/blink" -I"C:/SiliconLabs/SimplicityStudio/v4/developer/sdks/exx32/v4.4.0//kits/EFM32LG_STK3600/config" -I"C:/SiliconLabs/SimplicityStudio/v4/developer/sdks/exx32/v4.4.0//CMSIS/Include" -I"C:/SiliconLabs/SimplicityStudio/v4/developer/sdks/exx32/v4.4.0//emlib/inc" -I"C:/SiliconLabs/SimplicityStudio/v4/developer/sdks/exx32/v4.4.0//kits/common/bsp" -I"C:/SiliconLabs/SimplicityStudio/v4/developer/sdks/exx32/v4.4.0//Device/SiliconLabs/EFM32LG/Include" -O0 -Wall -c -fmessage-length=0 -mno-sched-prolog -fno-builtin -ffunction-sections -fdata-sections -MMD -MP -MF"src/rtc.d" -MT"src/rtc.o" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

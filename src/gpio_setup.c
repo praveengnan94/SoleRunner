@@ -22,8 +22,16 @@ void gpio_setup()
 	GPIO_DriveModeSet(ADC_PORT_HR, gpioDriveModeStandard);
 	GPIO_PinModeSet(ADC_PORT_HR, ADC_PIN_HR, gpioModeDisabled, 0);
 
-  //  GPIO_PinOutSet(LEDPORT, LEDPIN0);// Added for uart BLE - because its GPIO is ON on initilization
-  	  /* Enable GPIO_ODD interrupt vector in NVIC */
-//  	    NVIC_EnableIRQ(GPIO_ODD_IRQn);			//GPIO IRQ in i2c_tsl2651.c
+	/* Initialize inputs for NFC interrupt */
+	GPIO_PinModeSet(Nfc_Fd_Port, Nfc_Fd_Pin, gpioModeWiredAndPullUp, 1);	/* Input is set to be filtered */
+
+	GPIO_IntConfig(Nfc_Fd_Port, Nfc_Fd_Pin, Nfc_Fd_Rising_Int, Nfc_Fd_Falling_Int, true);
+
+	GPIO->INSENSE = GPIO_INSENSE_INT;				// Enable sensing interrupts on GPIO pins
+
+	/* Enable interrupts at the CPU level */
+	NVIC_ClearPendingIRQ(GPIO_ODD_IRQn);
+	NVIC_EnableIRQ(GPIO_ODD_IRQn);					/* Nfc_Fd interrupt is on an odd pin */
 
 }
+
