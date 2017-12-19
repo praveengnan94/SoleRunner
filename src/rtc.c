@@ -58,6 +58,7 @@ void RTC_IRQHandler(void)
 
   LETIMER0->IEN|=LETIMER_IF_UF;//ENABLE COMP0(UF) AND COMP1 INTERRUPTS
   /* Increase time by one minute */
+
   minutes++;
   if (minutes > 59)
   {
@@ -68,4 +69,7 @@ void RTC_IRQHandler(void)
       hours = 0;
     }
   }
+  int step_cnt_val = 7;
+  sprintf(global_buffer+LAST_WRITTEN_VALUE,"A%02d%02d%02d*",step_cnt_val,hours,minutes);
+  LAST_WRITTEN_VALUE=(LAST_WRITTEN_VALUE+8)%256;
 }

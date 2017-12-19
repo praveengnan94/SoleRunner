@@ -13,6 +13,7 @@
 int hrcount;
 long int glb_ct=0;
 uint32_t adc_array[HR_COUNT-5];
+int nfc_addr_inc = 0;
 
 long int pk_val=0,val_val=0,nw_val=0;
 long int prev_val_val=0,prev_pk_val=0;
@@ -103,7 +104,11 @@ void LETIMER0_IRQHandler(void)
 			  BPM=valid_count*(60/((HR_COUNT-5)/1000));
 
 			  sprintf(global_buffer+LAST_WRITTEN_VALUE,"H%03d%02d%02d",BPM,hours,minutes);
-			  LAST_WRITTEN_VALUE=(LAST_WRITTEN_VALUE+8)%255;
+			  LAST_WRITTEN_VALUE=(LAST_WRITTEN_VALUE+8)%256;
+
+			  i2c_wr_to_nfc(nfc_addr_inc+0x08);
+			  nfc_addr_inc = nfc_addr_inc + 1;
+
 
 			  LEUART_Tx(LEUART0,BPM);
 			  //write to NANDFLASH with timestamp

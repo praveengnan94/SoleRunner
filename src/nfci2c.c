@@ -7,7 +7,7 @@
 
 #include "nfci2c.h"
 uint8_t data1,data,read_data[16],write_data[16];
-
+int buff_inc = 0;
 
 void load_poweron()
 {
@@ -63,6 +63,7 @@ void i2c_nfc_write()
 
 void i2c_wr_to_nfc(uint16_t reg)
 {
+	INT_Disable();
 	i2c_nfc_writeauto();
 	I2C1->IFC=I2C_IFC_ACK;
 
@@ -72,7 +73,7 @@ void i2c_wr_to_nfc(uint16_t reg)
 
 	for(int i=0;i<16;i++)
 	{
-		I2C1->TXDATA = global_buffer+i;
+		I2C1->TXDATA = *(global_buffer+i+buff_inc);
 		while((I2C1->IF & I2C_IF_ACK)==0);
 		I2C1->IFC=I2C_IFC_ACK;
 		if (i == (16 - 2))
@@ -80,11 +81,27 @@ void i2c_wr_to_nfc(uint16_t reg)
 			I2C1->CTRL &= ~I2C_CTRL_AUTOACK;
 		}
 	}
+	buff_inc = buff_inc + 16;
+	if(buff_inc == 256)
+	{
+		buff_inc = 0;
+	}
 
 	I2C1->CMD=I2C_CMD_NACK;
 	I2C1->CMD=I2C_CMD_STOP;
-	for(long int i=0;i<500;i++);
 
+//		char savi = 'Q';
+//		for(int i=0;i<16;i++)
+//		{
+//			savi = *(global_buffer+i+buff_inc);
+//		}
+//		buff_inc = buff_inc + 16;
+//		if(buff_inc == 256)
+//		{
+//			buff_inc = 0;
+//		}
+	for(long int i=0;i<500;i++);
+	INT_Enable();
 }
 
 void i2c_rd_from_nfc(uint8_t regi)
@@ -209,31 +226,33 @@ void i2c_setup(void)
 	i2c_reset();
 
 //	i2c_wr_to_nfc(0x08);
-
+//	i2c_wr_to_nfc(0x18);
+//	i2c_wr_to_nfc(0x28);
 }
 
 unsigned int LAST_WRITTEN_ADDRESS=0x08;
 
 void GPIO_ODD_IRQHandler(void){
 	int intFlags;
-
 	intFlags = GPIO->IF;
 	GPIO->IFC = intFlags & 0x0000aaaa;	/* GPIO even interrupt handler so only clear even interrupts */
-	if(FDONflag==0)//0 means FD is ON
+	INT_Disable();
+	if(FDONflag == 0)
 	{
-		FDONflag=1;
+		GPIO_IntConfig(Nfc_Fd_Port, Nfc_Fd_Pin, true, false, true);
+		FDONflag = 1;
 		i2c_wr_to_nfc(0x08);
-		//Start transmitting data from global buffer to NTAG via i2c to LAST_WRITTEN_ADDRESS
-//		i2c_wr_to_nfc(LAST_WRITTEN_ADDRESS,global_buffer[LAST_WRITTEN_ADDRESS]);
-		i2c_wr_to_nfc(0x08+LAST_WRITTEN_ADDRESS);
-		LAST_WRITTEN_ADDRESS=((LAST_WRITTEN_ADDRESS+16)%255);
 	}
 	else
 	{
-		FDONflag=0;
-//		load_poweroff();
-
+		GPIO_IntConfig(Nfc_Fd_Port, Nfc_Fd_Pin, false, true, true);
+		FDONflag = 0;
 	}
 
+	//Start transmitting data from global buffer to NTAG via i2c to LAST_WRITTEN_ADDRESS
+//		i2c_wr_to_nfc(LAST_WRITTEN_ADDRESS,global_buffer[LAST_WRITTEN_ADDRESS]);
+	//i2c_wr_to_nfc(0x18);
+	//LAST_WRITTEN_ADDRESS=((LAST_WRITTEN_ADDRESS+16)%255);
+	INT_Enable();
 }
 

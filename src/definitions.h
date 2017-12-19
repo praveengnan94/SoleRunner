@@ -49,9 +49,11 @@ unsigned int minutes,hours;
 #define Nfc_Fd_Falling_Int	true
 
 
-unsigned int global_buffer[255];
+char global_buffer[256];
 unsigned int LAST_WRITTEN_VALUE;
 int FDONflag;
+
+
 
 #define NFC_I2C_ADDRESS 0x55
 #define wr_bit 0

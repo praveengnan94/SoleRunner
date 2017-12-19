@@ -18,6 +18,13 @@ int main(void)
   BlockSleep(block_sleep_mode);
   gpio_setup();
 
+#if 0
+  GpioSetup();
+  timer_init();
+  spi_init();
+  bma_init();
+#endif
+
   ADCSetup();
   i2c_setup();
   rtcSetup();

@@ -25,7 +25,7 @@ void gpio_setup()
 	/* Initialize inputs for NFC interrupt */
 	GPIO_PinModeSet(Nfc_Fd_Port, Nfc_Fd_Pin, gpioModeWiredAndPullUp, 1);	/* Input is set to be filtered */
 
-	GPIO_IntConfig(Nfc_Fd_Port, Nfc_Fd_Pin, Nfc_Fd_Rising_Int, Nfc_Fd_Falling_Int, true);
+	GPIO_IntConfig(Nfc_Fd_Port, Nfc_Fd_Pin, false, true, true);
 
 	GPIO->INSENSE = GPIO_INSENSE_INT;				// Enable sensing interrupts on GPIO pins
 
